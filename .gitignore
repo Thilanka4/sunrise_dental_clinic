@@ -1,4 +1,6 @@
 ﻿target/
+.mvn/
+!.mvn/wrapper/maven-wrapper.properties
 *.class
 *.jar
 *.war
@@ -9,3 +11,5 @@
 application-local.properties
 application-secrets.properties
 *.log
+hs_err_pid*
+replay_pid*
