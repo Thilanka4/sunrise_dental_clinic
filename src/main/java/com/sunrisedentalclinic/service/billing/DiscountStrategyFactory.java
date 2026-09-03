@@ -1,6 +1,5 @@
 package com.sunrisedentalclinic.service.billing;
 
-import com.sunrisedentalclinic.model.AppointmentStatus;
 import com.sunrisedentalclinic.model.Patient;
 import com.sunrisedentalclinic.model.Treatment;
 import com.sunrisedentalclinic.repository.AppointmentRepository;
@@ -17,7 +16,9 @@ import java.math.BigDecimal;
  * <p>Registration creates a new {@code Patient} row per appointment (there is no
  * patient-matching step), so history is looked up by contact number rather than
  * patient id — the one identifier that reliably ties appointments back to the same
- * person today.
+ * person today. Eligibility itself is delegated to the
+ * {@code fn_patient_loyalty_discount_rate} database function (Phase 6) instead of
+ * being recomputed here, so the rule lives in one place.
  */
 @Component
 public class DiscountStrategyFactory {
@@ -31,9 +32,8 @@ public class DiscountStrategyFactory {
     }
 
     public DiscountStrategy resolve(Patient patient, Treatment treatment) {
-        long completedAppointments = appointmentRepository.countByPatient_ContactNumberAndStatus(
-                patient.getContactNumber(), AppointmentStatus.COMPLETED);
-        if (completedAppointments > 0) {
+        BigDecimal loyaltyRate = appointmentRepository.findLoyaltyDiscountRate(patient.getContactNumber());
+        if (loyaltyRate != null && loyaltyRate.compareTo(BigDecimal.ZERO) > 0) {
             return new ReturningPatientDiscountStrategy();
         }
         if (treatment.getBaseCost().compareTo(PREMIUM_TREATMENT_THRESHOLD) >= 0) {

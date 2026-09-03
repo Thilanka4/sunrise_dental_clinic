@@ -12,6 +12,7 @@ import com.sunrisedentalclinic.repository.AppointmentRepository;
 import com.sunrisedentalclinic.repository.PatientRepository;
 import com.sunrisedentalclinic.repository.TreatmentRepository;
 import com.sunrisedentalclinic.service.notification.AppointmentBookingNotifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,10 +56,31 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = new Appointment(
                 appointmentNumberGenerator.next(), patient, treatment, request.getDentistName(), request.getAppointmentAt());
-        appointment = appointmentRepository.save(appointment);
+        appointment = saveAppointment(appointment, request);
         appointmentBookingNotifier.notifyObservers(appointment);
 
         return toResponse(appointment);
+    }
+
+    /**
+     * The {@code trg_prevent_dentist_double_booking} database trigger (Phase 6) is a
+     * backstop for the {@code existsByDentistNameIgnoreCase...} check above — it only
+     * fires if two requests for the same dentist/time both pass that check before
+     * either commits. Translate its SIGNAL into the same DoubleBookingException the
+     * caller already handles, instead of letting a raw SQL error surface.
+     */
+    private Appointment saveAppointment(Appointment appointment, AppointmentRegistrationRequest request) {
+        try {
+            return appointmentRepository.save(appointment);
+        } catch (DataAccessException ex) {
+            Throwable rootCause = ex.getMostSpecificCause();
+            if (rootCause.getMessage() != null
+                    && rootCause.getMessage().contains("Dentist already has an appointment")) {
+                throw new DoubleBookingException("Dr. " + request.getDentistName()
+                        + " already has an appointment at " + request.getAppointmentAt());
+            }
+            throw ex;
+        }
     }
 
     @Override
