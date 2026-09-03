@@ -16,8 +16,11 @@
     </div>
 </header>
 <main class="container py-5">
-    <h1 class="h3">Staff area</h1>
-    <p class="text-muted">Authentication is active. Appointment features will be added in the next phase.</p>
+    <h1 class="h3 mb-4">Staff area</h1>
+    <div class="d-flex gap-2">
+        <a th:href="@{/appointments/new}" class="btn btn-primary">Register New Appointment</a>
+        <a th:href="@{/appointments/search}" class="btn btn-outline-primary">Find Appointment</a>
+    </div>
 </main>
 </body>
 </html>

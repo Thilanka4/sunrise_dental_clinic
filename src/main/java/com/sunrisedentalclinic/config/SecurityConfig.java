@@ -29,6 +29,11 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll())
+                // The REST API is consumed by non-browser clients (Postman, curl, future
+                // integrations) that cannot supply a session-bound CSRF token. Web-form
+                // endpoints keep CSRF protection; JSON endpoints are session-authenticated
+                // instead.
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 // Spring stores the authenticated principal in the server-side session.
                 // The browser carries only the opaque JSESSIONID cookie on later requests.
                 .sessionManagement(session -> session
