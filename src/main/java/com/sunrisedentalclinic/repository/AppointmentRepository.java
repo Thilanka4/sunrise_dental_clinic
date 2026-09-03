@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -16,6 +17,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     boolean existsByDentistNameIgnoreCaseAndAppointmentAtAndStatusNot(
             String dentistName, LocalDateTime appointmentAt, AppointmentStatus excludedStatus);
+
+    List<Appointment> findByAppointmentAtGreaterThanEqualAndAppointmentAtLessThanOrderByAppointmentAtAsc(
+            LocalDateTime startInclusive, LocalDateTime endExclusive);
 
     /**
      * Calls the {@code fn_patient_loyalty_discount_rate} database function (see
