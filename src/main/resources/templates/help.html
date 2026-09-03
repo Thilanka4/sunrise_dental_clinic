@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Help | Sunrise Dental Clinic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments/navbar :: navbar}"></header>
+<main class="container py-5" style="max-width: 720px;">
+    <h1 class="h3 mb-4">Staff Guide</h1>
+    <p class="text-muted">A quick reference for the four things you'll do most often. For anything not covered
+        here, ask a colleague or your system administrator.</p>
+
+    <section class="mb-4">
+        <h2 class="h5">1. Signing in</h2>
+        <ol>
+            <li>Go to the login page and enter the staff username and password you were given.</li>
+            <li>Click <strong>Sign in</strong> — you'll land on the dashboard.</li>
+            <li>Use <strong>Sign out</strong> (top right of every page) when you're done.</li>
+        </ol>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h5">2. Registering a new appointment</h2>
+        <ol>
+            <li>Click <strong>Register</strong> in the nav bar (or "Register New Appointment" on the dashboard).</li>
+            <li>Fill in the patient's name, address, contact number, the dentist, the treatment, and the date/time.</li>
+            <li>Click <strong>Register appointment</strong>. You'll be shown the new appointment number (e.g.
+                APT000001) — give this to the patient.
+            </li>
+            <li>If the dentist already has an appointment at that time, you'll see an error — pick another time.</li>
+        </ol>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h5">3. Searching for an appointment</h2>
+        <ol>
+            <li>Click <strong>Find</strong> in the nav bar.</li>
+            <li>Enter the appointment number and click <strong>Search</strong>.</li>
+            <li>You'll see the full appointment details, including its current status.</li>
+        </ol>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h5">4. Generating a bill</h2>
+        <ol>
+            <li>Open the appointment (via Find, or from the dashboard's Today's Appointments list).</li>
+            <li>Click <strong>Generate / View Bill</strong>. This also marks the appointment as completed.</li>
+            <li>From the bill page you can <strong>Print</strong> it or <strong>Download PDF</strong>.</li>
+            <li>A bill can only be generated once per appointment — opening it again just shows the same bill.</li>
+        </ol>
+    </section>
+</main>
+</body>
+</html>
