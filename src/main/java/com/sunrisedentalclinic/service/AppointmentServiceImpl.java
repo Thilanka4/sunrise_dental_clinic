@@ -11,6 +11,7 @@ import com.sunrisedentalclinic.model.Treatment;
 import com.sunrisedentalclinic.repository.AppointmentRepository;
 import com.sunrisedentalclinic.repository.PatientRepository;
 import com.sunrisedentalclinic.repository.TreatmentRepository;
+import com.sunrisedentalclinic.service.notification.AppointmentBookingNotifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +22,18 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final PatientRepository patientRepository;
     private final TreatmentRepository treatmentRepository;
     private final AppointmentNumberGenerator appointmentNumberGenerator;
+    private final AppointmentBookingNotifier appointmentBookingNotifier;
 
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
             PatientRepository patientRepository,
             TreatmentRepository treatmentRepository,
-            AppointmentNumberGenerator appointmentNumberGenerator) {
+            AppointmentNumberGenerator appointmentNumberGenerator,
+            AppointmentBookingNotifier appointmentBookingNotifier) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.treatmentRepository = treatmentRepository;
         this.appointmentNumberGenerator = appointmentNumberGenerator;
+        this.appointmentBookingNotifier = appointmentBookingNotifier;
     }
 
     @Override
@@ -52,6 +56,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = new Appointment(
                 appointmentNumberGenerator.next(), patient, treatment, request.getDentistName(), request.getAppointmentAt());
         appointment = appointmentRepository.save(appointment);
+        appointmentBookingNotifier.notifyObservers(appointment);
 
         return toResponse(appointment);
     }

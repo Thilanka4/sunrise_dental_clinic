@@ -13,4 +13,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     boolean existsByDentistNameIgnoreCaseAndAppointmentAtAndStatusNot(
             String dentistName, LocalDateTime appointmentAt, AppointmentStatus excludedStatus);
+
+    long countByPatient_ContactNumberAndStatus(String contactNumber, AppointmentStatus status);
 }

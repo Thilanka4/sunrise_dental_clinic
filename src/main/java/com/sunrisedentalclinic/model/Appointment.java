@@ -82,4 +82,11 @@ public class Appointment {
     public AppointmentStatus getStatus() {
         return status;
     }
+
+    public void markCompleted() {
+        if (status == AppointmentStatus.CANCELLED) {
+            throw new IllegalStateException("Cannot complete a cancelled appointment");
+        }
+        this.status = AppointmentStatus.COMPLETED;
+    }
 }

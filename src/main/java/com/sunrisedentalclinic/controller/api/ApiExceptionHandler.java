@@ -2,6 +2,8 @@ package com.sunrisedentalclinic.controller.api;
 
 import com.sunrisedentalclinic.dto.ApiError;
 import com.sunrisedentalclinic.exception.DoubleBookingException;
+import com.sunrisedentalclinic.exception.DuplicateBillException;
+import com.sunrisedentalclinic.exception.InvalidAppointmentStateException;
 import com.sunrisedentalclinic.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,18 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DoubleBookingException.class)
     public ResponseEntity<ApiError> handleConflict(DoubleBookingException ex) {
         ApiError body = ApiError.of(HttpStatus.CONFLICT.value(), "Booking conflict", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(DuplicateBillException.class)
+    public ResponseEntity<ApiError> handleDuplicateBill(DuplicateBillException ex) {
+        ApiError body = ApiError.of(HttpStatus.CONFLICT.value(), "Bill already exists", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(InvalidAppointmentStateException.class)
+    public ResponseEntity<ApiError> handleInvalidState(InvalidAppointmentStateException ex) {
+        ApiError body = ApiError.of(HttpStatus.CONFLICT.value(), "Invalid appointment state", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }

@@ -17,6 +17,7 @@
 </header>
 <main class="container py-5" style="max-width: 640px;">
     <h1 class="h3 mb-4">Appointment Details</h1>
+    <div class="alert alert-danger" th:if="${billError}" th:text="${billError}"></div>
     <dl class="row">
         <dt class="col-sm-4">Appointment number</dt>
         <dd class="col-sm-8" th:text="${appointment.appointmentNumber}"></dd>
@@ -47,6 +48,11 @@
     </dl>
     <a th:href="@{/appointments/search}" class="btn btn-outline-primary">Search another appointment</a>
     <a th:href="@{/appointments/new}" class="btn btn-primary">Register new appointment</a>
+    <form th:if="${appointment.status.name() != 'CANCELLED'}"
+          th:action="@{'/appointments/' + ${appointment.appointmentNumber} + '/bill'}"
+          method="post" class="d-inline">
+        <button type="submit" class="btn btn-success">Generate / View Bill</button>
+    </form>
 </main>
 </body>
 </html>
