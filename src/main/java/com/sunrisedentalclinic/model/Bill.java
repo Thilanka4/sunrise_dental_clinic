@@ -41,7 +41,7 @@ public class Bill {
     }
 
     public Bill(Appointment appointment, BigDecimal consultationFee, BigDecimal treatmentCost,
-                BigDecimal totalCost, LocalDateTime issuedAt) {
+            BigDecimal totalCost, LocalDateTime issuedAt) {
         this.appointment = appointment;
         this.consultationFee = consultationFee;
         this.treatmentCost = treatmentCost;

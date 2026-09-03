@@ -47,7 +47,7 @@ public class Appointment {
     }
 
     public Appointment(String appointmentNumber, Patient patient, Treatment treatment,
-                       String dentistName, LocalDateTime appointmentAt) {
+            String dentistName, LocalDateTime appointmentAt) {
         this.appointmentNumber = appointmentNumber;
         this.patient = patient;
         this.treatment = treatment;
